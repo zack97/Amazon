@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
+// App.jsx
+
+import React, { useEffect, Suspense, lazy } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
-import Home from "./components/Home";
 import Checkout from "./components/Checkout";
 import Login from "./components/Login";
 import { auth } from "./firebase";
 import { useStateValue } from "./components/StateProvider";
+
+const Home = lazy(() => import("./components/Home"));
 
 function App() {
   const [{}, dispatch] = useStateValue();
@@ -27,6 +30,7 @@ function App() {
       }
     });
   }, []);
+
   return (
     <Router>
       <div className="app">
@@ -45,10 +49,10 @@ function App() {
           <Route
             path="/"
             element={
-              <>
+              <Suspense fallback={<div>Loading...</div>}>
                 <Header />
                 <Home />
-              </>
+              </Suspense>
             }
           />
         </Routes>
